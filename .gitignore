@@ -1,0 +1,19 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Env secrets
+.env
+
+# Strava data (your private runs)
+backend/data/
+*.json
+
+# Build outputs
+frontend/dist
+frontend/.vite
+
+# OS
+.DS_Store
