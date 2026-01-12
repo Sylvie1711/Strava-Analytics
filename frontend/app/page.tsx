@@ -3,6 +3,12 @@
 import { useEffect, useState } from "react"
 import { YearInReview } from "@/components/year-in-review"
 import { YearSelector } from "@/components/year-selector"
+import { StatsOverview } from "@/components/stats-overview"
+import { ConsistencySection } from "@/components/consistency-section"
+import { PerformanceSection } from "@/components/performance-section"
+import { ProgressCharts } from "@/components/progress-charts"
+import { ActivityBreakdown } from "@/components/activity-breakdown"
+import { AthleteProfile } from "@/components/athlete-profile"
 import { fetchStravaStats, YearSummary } from "@/lib/api"
 
 export default function Page() {
@@ -105,7 +111,11 @@ export default function Page() {
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="space-y-16">
-          <YearInReview stats={stats} selectedYear={selectedYear} />
+          <ConsistencySection stats={stats} />
+          <PerformanceSection stats={stats} />
+          <ProgressCharts stats={stats} selectedYear={selectedYear} />
+          <ActivityBreakdown stats={stats} />
+          <AthleteProfile stats={stats} />
         </div>
       </div>
     </div>

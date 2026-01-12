@@ -6,9 +6,10 @@ import { YearSummary } from "@/lib/api"
 
 interface ProgressChartsProps {
   stats?: YearSummary | null
+  selectedYear?: string
 }
 
-export function ProgressCharts({ stats }: ProgressChartsProps) {
+export function ProgressCharts({ stats, selectedYear }: ProgressChartsProps) {
   const monthlyDistance = stats?.monthly_stats || []
 
 const monthlyPace = stats?.monthly_stats?.map(stat => ({
@@ -48,6 +49,36 @@ const trainingLoad = stats?.weekly_volume?.map(week => ({
               <Bar dataKey="distance" fill="hsl(var(--chart-1))" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
+        </Card>
+
+        {/* Cumulative Distance */}
+        <Card className="border-border bg-card p-6">
+          <h3 className="mb-4 text-lg font-semibold">Cumulative Distance</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={stats?.cumulative_distance || []}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12} />
+              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--card))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "8px",
+                }}
+                labelStyle={{ color: "hsl(var(--foreground))" }}
+              />
+              <Line
+                type="monotone"
+                dataKey="total"
+                stroke="hsl(var(--chart-1))"
+                strokeWidth={3}
+                dot={{ fill: "hsl(var(--chart-1))", r: 4 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+          <p className="mt-4 text-sm text-muted-foreground">
+            Total distance progression throughout {selectedYear || new Date().getFullYear().toString()}
+          </p>
         </Card>
 
         {/* Monthly Pace */}
