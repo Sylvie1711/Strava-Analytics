@@ -5,13 +5,27 @@ import type React from "react"
 import { Card } from "@/components/ui/card"
 import { Cell, Pie, PieChart, ResponsiveContainer, Legend, Tooltip } from "recharts"
 import { Bike, Footprints, Waves, TrendingUp } from "lucide-react"
+import { YearSummary } from "@/lib/api"
 
-const activityData = [
-  { name: "Run", value: 1842, distance: "1,842 km", color: "hsl(var(--chart-1))" },
-  { name: "Ride", value: 687, distance: "687 km", color: "hsl(var(--chart-2))" },
-  { name: "Walk", value: 234, distance: "234 km", color: "hsl(var(--chart-3))" },
-  { name: "Swim", value: 84, distance: "84 km", color: "hsl(var(--chart-4))" },
-]
+interface ActivityBreakdownProps {
+  stats?: YearSummary | null
+}
+
+export function ActivityBreakdown({ stats }: ActivityBreakdownProps) {
+  const activityData = stats?.activity_types?.map(activity => ({
+    name: activity.type,
+    value: activity.count,
+    distance: `${activity.distance.toFixed(0)} km`,
+    color: activity.type === "Run" ? "hsl(var(--chart-1))" : 
+           activity.type === "Ride" ? "hsl(var(--chart-2))" :
+           activity.type === "Walk" ? "hsl(var(--chart-3))" : 
+           "hsl(var(--chart-4))"
+  })) || [
+    { name: "Run", value: 1842, distance: "1,842 km", color: "hsl(var(--chart-1))" },
+    { name: "Ride", value: 687, distance: "687 km", color: "hsl(var(--chart-2))" },
+    { name: "Walk", value: 234, distance: "234 km", color: "hsl(var(--chart-3))" },
+    { name: "Swim", value: 84, distance: "84 km", color: "hsl(var(--chart-4))" },
+  ]
 
 const activityIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   Run: Footprints,
@@ -20,7 +34,6 @@ const activityIcons: Record<string, React.ComponentType<{ className?: string }>>
   Swim: Waves,
 }
 
-export function ActivityBreakdown() {
   return (
     <section className="space-y-6">
       <div>
@@ -76,7 +89,7 @@ export function ActivityBreakdown() {
                 <div key={activity.name} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Icon className="size-5" style={{ color: activity.color }} />
+                      <div className={`size-5 rounded`} style={{ backgroundColor: activity.color }} />
                       <span className="font-medium">{activity.name}</span>
                     </div>
                     <div className="text-right">

@@ -1,7 +1,7 @@
-import { Activity, YearSummary } from './types';
-import { calculateTotals } from './totals';
-import { calculateLongestStreak } from './streaks';
-import { calculatePersonalRecords } from './performance';
+import { YearSummary } from './types.js';
+import { calculateTotals } from './totals.js';
+import { calculateLongestStreak } from './streaks.js';
+import { calculatePersonalRecords } from './performance.js';
 import { 
   calculateMonthlyStats, 
   calculateCumulativeDistance, 
@@ -9,15 +9,15 @@ import {
   calculateTimeOfDay, 
   calculateWeeklyVolume, 
   calculateActivityFrequency 
-} from './breakdowns';
-import { calculateMilestones } from './achievements';
+} from './breakdowns.js';
+import { calculateMilestones } from './achievements.js';
 
 /**
  * Main function to build a complete YearSummary from activities
- * @param activities - Array of Strava activities
- * @returns Complete YearSummary object
+ * @param {Array} activities - Array of Strava activities
+ * @returns {YearSummary} Complete YearSummary object
  */
-export function buildYearSummary(activities: Activity[]): YearSummary {
+export function buildYearSummary(activities) {
   // Calculate all metrics
   const totals = calculateTotals(activities);
   const longestStreak = calculateLongestStreak(activities);
@@ -31,7 +31,7 @@ export function buildYearSummary(activities: Activity[]): YearSummary {
   const milestones = calculateMilestones(activities);
 
   // Combine all into YearSummary
-  return {
+  return new YearSummary({
     ...totals,
     longest_streak: longestStreak,
     monthly_stats: monthlyStats,
@@ -42,5 +42,5 @@ export function buildYearSummary(activities: Activity[]): YearSummary {
     activity_frequency: activityFrequency,
     milestones,
     personal_records: personalRecords
-  };
+  });
 }

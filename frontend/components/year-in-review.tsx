@@ -10,9 +10,10 @@ import { YearSummary } from "@/lib/api"
 
 interface YearInReviewProps {
   stats?: YearSummary | null
+  selectedYear?: string
 }
 
-export function YearInReview({ stats }: YearInReviewProps) {
+export function YearInReview({ stats, selectedYear }: YearInReviewProps) {
   return (
     <div className="dark min-h-screen bg-background text-foreground">
       {/* Hero Section */}
@@ -20,7 +21,7 @@ export function YearInReview({ stats }: YearInReviewProps) {
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
-              2024 Year in Review
+              {selectedYear || new Date().getFullYear().toString()} Year in Review
             </div>
             <h1 className="mb-4 text-balance text-5xl font-bold tracking-tight sm:text-7xl">
               Your Year of <span className="text-primary">Movement</span>
@@ -36,10 +37,10 @@ export function YearInReview({ stats }: YearInReviewProps) {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="space-y-16">
           <StatsOverview stats={stats} />
-          <ConsistencySection />
-          <PerformanceSection />
-          <ProgressCharts />
-          <ActivityBreakdown />
+          <ConsistencySection stats={stats} />
+          <PerformanceSection stats={stats} />
+          <ProgressCharts stats={stats} />
+          <ActivityBreakdown stats={stats} />
           <AthleteProfile />
         </div>
       </div>

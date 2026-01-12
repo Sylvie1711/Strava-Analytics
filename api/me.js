@@ -1,10 +1,15 @@
-import { db } from "./db";
-import { users } from "./schema";
+import { db } from "./db.js";
+import { users } from "./schema.js";
 import { eq } from "drizzle-orm";
-import { buildYearSummary } from "../metrics/index";
+import { buildYearSummary } from "./metrics/index.js";
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req, res) {
   const stravaId = req.query.stravaId;
+  const year = req.query.year || new Date().getFullYear().toString(); // Default to current year
+  
+  if (!stravaId) {
+    return res.status(400).json({ error: "Missing stravaId parameter" });
+  }
 
   const result = await db
     .select()
@@ -18,7 +23,7 @@ export default async function handler(req: any, res: any) {
   const user = result[0];
 
   const after = Math.floor(
-    new Date(new Date().getFullYear(), 0, 1).getTime() / 1000
+    new Date(parseInt(year), 0, 1).getTime() / 1000
   );
 
   let page = 1;

@@ -1,5 +1,10 @@
-export default function handler(req: any, res: any) {
+
+export default function handler(req, res) {
   const clientId = process.env.STRAVA_CLIENT_ID;
+
+  if (!clientId) {
+    return res.status(500).json({ error: "Strava client ID not configured" });
+  }
 
   const redirect =
     "https://www.strava.com/oauth/authorize" +

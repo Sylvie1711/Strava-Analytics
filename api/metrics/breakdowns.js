@@ -1,7 +1,7 @@
-import { Activity, MonthlyStats, CumulativeDistance, ActivityTypes, TimeOfDay, WeeklyVolume, ActivityFrequency } from './types';
+import { Activity, MonthlyStats, CumulativeDistance, ActivityTypes, TimeOfDay, WeeklyVolume, ActivityFrequency } from './types.js';
 
-export function calculateMonthlyStats(activities: Activity[]): MonthlyStats[] {
-  const monthlyMap = new Map<string, number>();
+export function calculateMonthlyStats(activities) {
+  const monthlyMap = new Map();
 
   for (const activity of activities) {
     const distanceKm = activity.distance / 1000;
@@ -10,17 +10,17 @@ export function calculateMonthlyStats(activities: Activity[]): MonthlyStats[] {
   }
 
   return Array.from(monthlyMap.entries())
-    .map(([month, distance]) => ({ month, distance: Math.round(distance * 100) / 100 }))
+    .map(([month, distance]) => new MonthlyStats({ month, distance: Math.round(distance * 100) / 100 }))
     .sort((a, b) => a.month.localeCompare(b.month));
 }
 
-export function calculateCumulativeDistance(activities: Activity[]): CumulativeDistance[] {
+export function calculateCumulativeDistance(activities) {
   // Sort activities by date
   const sortedActivities = [...activities].sort((a, b) => 
     new Date(a.start_date_local).getTime() - new Date(b.start_date_local).getTime()
   );
 
-  const cumulativeMap = new Map<string, number>();
+  const cumulativeMap = new Map();
   let runningTotal = 0;
 
   for (const activity of sortedActivities) {
@@ -31,12 +31,12 @@ export function calculateCumulativeDistance(activities: Activity[]): CumulativeD
   }
 
   return Array.from(cumulativeMap.entries())
-    .map(([date, total]) => ({ date, total }))
+    .map(([date, total]) => new CumulativeDistance({ date, total }))
     .sort((a, b) => a.date.localeCompare(b.date));
 }
 
-export function calculateActivityTypes(activities: Activity[]): ActivityTypes[] {
-  const typeMap = new Map<string, { count: number; distance: number }>();
+export function calculateActivityTypes(activities) {
+  const typeMap = new Map();
 
   for (const activity of activities) {
     const distanceKm = activity.distance / 1000;
@@ -48,7 +48,7 @@ export function calculateActivityTypes(activities: Activity[]): ActivityTypes[] 
   }
 
   return Array.from(typeMap.entries())
-    .map(([type, data]) => ({
+    .map(([type, data]) => new ActivityTypes({
       type,
       count: data.count,
       distance: Math.round(data.distance * 100) / 100
@@ -56,27 +56,27 @@ export function calculateActivityTypes(activities: Activity[]): ActivityTypes[] 
     .sort((a, b) => b.distance - a.distance);
 }
 
-export function calculateTimeOfDay(activities: Activity[]): TimeOfDay[] {
-  const hourMap = new Map<number, number>();
+export function calculateTimeOfDay(activities) {
+  const hourMap = new Map();
 
   for (const activity of activities) {
     const hour = new Date(activity.start_date_local).getHours();
     hourMap.set(hour, (hourMap.get(hour) || 0) + 1);
   }
 
-  const result: TimeOfDay[] = [];
+  const result = [];
   for (let hour = 0; hour < 24; hour++) {
-    result.push({
+    result.push(new TimeOfDay({
       hour,
       count: hourMap.get(hour) || 0
-    });
+    }));
   }
 
   return result;
 }
 
-export function calculateWeeklyVolume(activities: Activity[]): WeeklyVolume[] {
-  const weekMap = new Map<string, number>();
+export function calculateWeeklyVolume(activities) {
+  const weekMap = new Map();
 
   for (const activity of activities) {
     const distanceKm = activity.distance / 1000;
@@ -89,12 +89,12 @@ export function calculateWeeklyVolume(activities: Activity[]): WeeklyVolume[] {
   }
 
   return Array.from(weekMap.entries())
-    .map(([week, distance]) => ({ week, distance: Math.round(distance * 100) / 100 }))
+    .map(([week, distance]) => new WeeklyVolume({ week, distance: Math.round(distance * 100) / 100 }))
     .sort((a, b) => a.week.localeCompare(b.week));
 }
 
-export function calculateActivityFrequency(activities: Activity[]): ActivityFrequency[] {
-  const monthlyMap = new Map<string, number>();
+export function calculateActivityFrequency(activities) {
+  const monthlyMap = new Map();
 
   for (const activity of activities) {
     const month = activity.start_date_local.substring(0, 7); // YYYY-MM
@@ -102,12 +102,12 @@ export function calculateActivityFrequency(activities: Activity[]): ActivityFreq
   }
 
   return Array.from(monthlyMap.entries())
-    .map(([period, count]) => ({ period, count }))
+    .map(([period, count]) => new ActivityFrequency({ period, count }))
     .sort((a, b) => a.period.localeCompare(b.period));
 }
 
 // Helper function to get ISO week number
-function getISOWeek(date: Date): number {
+function getISOWeek(date) {
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
   const dayNum = d.getUTCDay() || 7;
   d.setUTCDate(d.getUTCDate() + 4 - dayNum);

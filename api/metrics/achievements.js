@@ -1,6 +1,6 @@
-import { Activity } from './types';
+import { Activity } from './types.js';
 
-export function calculateMilestones(activities: Activity[]): string[] {
+export function calculateMilestones(activities) {
   const milestones = [
     { distance: 100, badge: '100 km' },
     { distance: 500, badge: '500 km' },

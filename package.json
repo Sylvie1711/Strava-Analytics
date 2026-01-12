@@ -9,5 +9,10 @@
   "dependencies": {
     "drizzle-orm": "^0.30.4",
     "pg": "^8.11.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/pg": "^8.10.9",
+    "typescript": "^5.0.0"
   }
 }

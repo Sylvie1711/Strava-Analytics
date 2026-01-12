@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react"
 import { YearInReview } from "@/components/year-in-review"
+import { YearSelector } from "@/components/year-selector"
 import { fetchStravaStats, YearSummary } from "@/lib/api"
 
 export default function Page() {
   const [stravaId, setStravaId] = useState<string | null>(null)
+  const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString())
   const [stats, setStats] = useState<YearSummary | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -21,12 +23,18 @@ export default function Page() {
     }
 
     setStravaId(stravaIdParam)
-    
-    // Fetch stats from backend
+  }, [])
+
+  useEffect(() => {
+    // Fetch stats whenever stravaId or selectedYear changes
+    if (!stravaId) return
+
     const loadStats = async () => {
       try {
-        const data = await fetchStravaStats(stravaIdParam)
+        setLoading(true)
+        const data = await fetchStravaStats(stravaId, selectedYear)
         setStats(data)
+        setError(null)
       } catch (err) {
         setError("Failed to load your Strava stats. Please try again.")
       } finally {
@@ -35,7 +43,7 @@ export default function Page() {
     }
 
     loadStats()
-  }, [])
+  }, [stravaId, selectedYear])
 
   if (loading) {
     return (
@@ -70,7 +78,7 @@ export default function Page() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center max-w-md">
           <h1 className="text-4xl font-bold mb-4">🏃 Strava Year Review</h1>
-          <p className="text-muted-foreground mb-8">Connect your Strava account to see your 2024 running stats!</p>
+          <p className="text-muted-foreground mb-8">Connect your Strava account to see your {selectedYear} running stats!</p>
           <button
             onClick={() => window.location.href = "/api/login"}
             className="px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold text-lg hover:bg-primary/90 transition-colors w-full"
@@ -84,7 +92,22 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-background">
-      <YearInReview stats={stats} />
+      {/* Year Selector */}
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="mx-auto max-w-7xl px-4 py-4">
+          <YearSelector 
+            selectedYear={selectedYear} 
+            onYearChange={setSelectedYear} 
+          />
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="space-y-16">
+          <YearInReview stats={stats} selectedYear={selectedYear} />
+        </div>
+      </div>
     </div>
   )
 }

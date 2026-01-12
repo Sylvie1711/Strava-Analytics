@@ -1,6 +1,11 @@
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Trophy, Flame, Compass, Calendar, Zap } from "lucide-react"
+import { YearSummary } from "@/lib/api"
+
+interface AthleteProfileProps {
+  stats?: YearSummary | null
+}
 
 const athleteTypes = {
   "The Grinder": {
@@ -11,7 +16,7 @@ const athleteTypes = {
   },
   "The Sprinter": {
     icon: Zap,
-    description: "Fast and fierce. You live for the speed and the thrill of pushing your pace.",
+    description: "Fast and fierce. You live for the speed and thrill of pushing your pace.",
     color: "text-chart-2",
     bgColor: "bg-chart-2/10",
   },
@@ -35,18 +40,32 @@ const athleteTypes = {
   },
 }
 
-// Logic to determine athlete type based on mock data
-const determineAthleteType = (): keyof typeof athleteTypes => {
-  // Based on the mock data:
-  // - High consistency (218 active days)
-  // - Good pace improvements
-  // - Strong streak (42 days)
-  // This suggests "The Grinder"
-  return "The Grinder"
+// Logic to determine athlete type based on real stats
+const determineAthleteType = (stats: YearSummary | null | undefined): keyof typeof athleteTypes => {
+  if (!stats) return "The Grinder"
+  
+  const { total_activities, active_days, longest_streak, avg_pace } = stats
+  
+  // Calculate metrics for athlete type determination
+  const consistencyPercentage = (active_days / 365) * 100
+  const hasGoodStreak = longest_streak >= 14
+  const hasGoodPace = avg_pace > 0 && avg_pace < 360 // 6 min/km = 360 seconds
+  
+  if (consistencyPercentage >= 60 && hasGoodStreak) {
+    return "The Grinder"
+  } else if (hasGoodPace && total_activities >= 50) {
+    return "The Sprinter" 
+  } else if (total_activities >= 100) {
+    return "The Explorer"
+  } else if (consistencyPercentage >= 40) {
+    return "The Weekend Warrior"
+  } else {
+    return "The Machine"
+  }
 }
 
-export function AthleteProfile() {
-  const athleteType = determineAthleteType()
+export function AthleteProfile({ stats }: AthleteProfileProps) {
+  const athleteType = determineAthleteType(stats)
   const profile = athleteTypes[athleteType]
   const Icon = profile.icon
 
@@ -71,15 +90,15 @@ export function AthleteProfile() {
 
           <div className="grid w-full max-w-3xl gap-4 sm:grid-cols-3">
             <div className="rounded-lg border border-border bg-background p-4">
-              <p className="text-2xl font-bold text-primary">218</p>
+              <p className="text-2xl font-bold text-primary">{stats?.active_days || 0}</p>
               <p className="mt-1 text-sm text-muted-foreground">Active Days</p>
             </div>
             <div className="rounded-lg border border-border bg-background p-4">
-              <p className="text-2xl font-bold text-primary">42</p>
+              <p className="text-2xl font-bold text-primary">{stats?.longest_streak || 0}</p>
               <p className="mt-1 text-sm text-muted-foreground">Day Streak</p>
             </div>
             <div className="rounded-lg border border-border bg-background p-4">
-              <p className="text-2xl font-bold text-primary">87</p>
+              <p className="text-2xl font-bold text-primary">{Math.round(((stats?.active_days || 0) / 365) * 100) || 0}</p>
               <p className="mt-1 text-sm text-muted-foreground">Consistency</p>
             </div>
           </div>

@@ -1,10 +1,10 @@
-import { Activity } from './types';
+import { Activity } from './types.js';
 
-export function calculateLongestStreak(activities: Activity[]): number {
+export function calculateLongestStreak(activities) {
   if (activities.length === 0) return 0;
 
   // Get unique active days sorted
-  const activeDays = new Set<string>();
+  const activeDays = new Set();
   for (const activity of activities) {
     const localDate = activity.start_date_local.split('T')[0];
     activeDays.add(localDate);

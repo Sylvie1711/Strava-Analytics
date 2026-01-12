@@ -1,11 +1,16 @@
 import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Flame, Sun, Moon } from "lucide-react"
+import { YearSummary } from "@/lib/api"
 
-export function ConsistencySection() {
-  const consistencyScore = 87
-  const longestStreak = 42
-  const activeDays = 218
+interface ConsistencySectionProps {
+  stats?: YearSummary | null
+}
+
+export function ConsistencySection({ stats }: ConsistencySectionProps) {
+  const longestStreak = stats?.longest_streak || 42
+  const activeDays = stats?.active_days || 218
+  const consistencyScore = Math.round((activeDays / 366) * 100) || 87
   const totalDays = 366
   const weekendActivities = 87
   const weekdayActivities = 156

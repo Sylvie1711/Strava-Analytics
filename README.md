@@ -1,82 +1,49 @@
 # Strava Year Review
 
-A beautiful, interactive year-in-review dashboard for Strava runners, built with React, Vite, and Node.js.
+[![Netlify Status](https://api.netlify.com/api/v1/badges/3f797033-0880-4d53-8599-ce23a3888959/deploy-status)](https://app.netlify.com/sites/strava-year-review/deploys)
 
-## 🚀 Features
+Strava Year Review is a web application that allows users to easily view and analyze their Strava data from the past year. Built with Next.js, Tailwind CSS, and various other libraries and frameworks, this application provides a visually appealing and intuitive user interface for viewing their running, cycling, and swimming data.
 
-### Current Implementation
-- **OAuth Authentication** with Strava
-- **Responsive Dashboard** with modern UI
-- **Animated Statistics** with Framer Motion
-- **Interactive Charts** using Recharts
-  - Monthly distance bar chart
-  - Cumulative distance line chart
-- **Mobile-First Design** that works on all devices
-- **Share Functionality** for social media
+## Features
 
-### Frontend (React + Vite)
-- Built with modern React hooks
-- Responsive layout with Tailwind CSS
-- Beautiful animations and transitions
-- Error handling and loading states
-- Modular component architecture
+- **Responsive Design**: The web application is designed to be viewable on various screen sizes and devices, ensuring a seamless user experience across different platforms.
 
-### Backend (Node.js)
-- OAuth 2.0 flow with Strava
-- API endpoints for user data
-- Session management
-- Environment-based configuration
+- **Visual Analytics**: Users can easily view their Strava data by year, month, and day. The application provides interactive charts and graphs to visualize their running, cycling, and swimming data.
 
-## 🛠️ Development Setup
+- **Customizable Theme**: Users have the ability to choose from different color schemes and light/dark mode options to customize their experience.
 
-1. **Clone the repository**
-   ```bash
-   git clone [https://github.com/Sylvie1711/Strava-Analytics.git](https://github.com/Sylvie1711/Strava-Analytics.git)
-   cd Strava-Year-Review
+- **Integration with Strava**: The application leverages the Strava API to fetch data from the user's Strava account. Users must authenticate with their Strava account to view their data.
 
-2. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   # Fill in the required values in the .env file
-3. **Install dependencies**
-npm install
+- **Secure and Private**: The application follows best practices for secure authentication and data storage, ensuring the privacy and security of user data.
 
-# Frontend
-cd frontend
-npm install
-cd ..
-4. **Run in development**
-npm run dev
-5. **Build for production**
-npm run build
-6. **Deploy to Vercel**
-vercel --prod
+## Technologies Used
 
+- **Next.js**: A popular React framework for building server-side rendered React applications.
 
-Deployment
-The app is configured for deployment on Vercel. The vercel.json file handles routing for both the frontend and API.
+- **Tailwind CSS**: A utility-first CSS framework that provides a set of pre-defined utility classes to build responsive and consistent user interfaces.
 
-Live Demo: https://strava-hazel.vercel.app
+- **Strava API**: The application integrates with the Strava API to fetch running, cycling, and swimming data from the user's Strava account.
 
-📝 Current Status
-✅ Completed
-OAuth authentication with Strava
-Basic user profile display
-Responsive dashboard layout
-Animated statistics cards
-Interactive charts with sample data
-Share functionality
-Error handling and loading states
-🔄 In Progress/TODO
-Connect frontend to real Strava activity data
-Implement data persistence
-Add more detailed activity statistics
-Implement user preferences
-Add more visualization types
-Write tests
-Performance optimization
-🛠️ Tech Stack
-Frontend: React, Vite, Tailwind CSS, Framer Motion, Recharts
-Backend: Node.js, Express
-Authentication: OAuth 2.0 with Strava
-Deployment: Vercel
+- **TypeScript**: A statically-typed superset of JavaScript that provides better code readability and maintainability.
+
+## Getting Started
+
+To run this application locally, follow these steps:
+
+1. Clone the repository: `git clone https://github.com/your-username/strava-year-review.git`
+
+2. Navigate to the project directory: `cd strava-year-review`
+
+3. Install dependencies: `npm install`
+
+4. Start the development server: `npm run dev`
+
+5. Open your browser and visit `http://localhost:3000`
+
+## Contributing
+
+Contributions are welcome! If you find any issues or have feature requests, please create an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

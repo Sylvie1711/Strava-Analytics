@@ -1,12 +1,12 @@
-import { Activity } from './types';
+import { Activity } from './types.js';
 
-export function calculateTotals(activities: Activity[]) {
+export function calculateTotals(activities) {
   let totalDistance = 0;
   let totalMovingTime = 0;
   let maxElevationGain = 0;
   let longestActivity = { distance: 0, duration: 0 };
   let fastestActivity = { pace: Infinity, distance: 0 };
-  const activeDays = new Set<string>();
+  const activeDays = new Set();
 
   for (const activity of activities) {
     // Convert distance to km

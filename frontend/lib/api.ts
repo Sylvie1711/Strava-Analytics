@@ -36,9 +36,10 @@ export interface YearSummary {
   }[]
 }
 
-export async function fetchStravaStats(stravaId: string): Promise<YearSummary> {
+export async function fetchStravaStats(stravaId: string, year?: string): Promise<YearSummary> {
   try {
-    const response = await fetch(`/api/me?stravaId=${stravaId}`);
+    const url = year ? `/api/me?stravaId=${stravaId}&year=${year}` : `/api/me?stravaId=${stravaId}`
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error('Failed to fetch stats');
     }
