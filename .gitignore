@@ -12,8 +12,12 @@ backend/data/
 *.json
 
 # Build outputs
-frontend/dist
 frontend/.vite
 
 # OS
 .DS_Store
+.vercel
+
+/generated/prisma
+
+/generated/prisma
