@@ -2,7 +2,7 @@ import { db } from "./db.js";
 import { users } from "./schema.js";
 import { eq } from "drizzle-orm";
 
-export default async function handler(req, res) {
+export default async function handler(req: any, res: any) {
   const code = req.query.code;
 
   // Exchange code for token
@@ -48,5 +48,4 @@ export default async function handler(req, res) {
   }
 
   res.redirect(`/?stravaId=${stravaId}`);
-
 }

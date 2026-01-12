@@ -1,4 +1,4 @@
-export default function handler(req, res) {
+export default function handler(req: any, res: any) {
   const clientId = process.env.STRAVA_CLIENT_ID;
 
   const redirect =
