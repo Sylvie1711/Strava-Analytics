@@ -1,5 +1,5 @@
-import { db } from "./db.js";
-import { users } from "./schema.js";
+import { db } from "./db";
+import { users } from "./schema";
 import { eq } from "drizzle-orm";
 import { buildYearSummary } from "../metrics/index.js";
 

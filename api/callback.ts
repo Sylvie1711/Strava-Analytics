@@ -1,5 +1,5 @@
-import { db } from "./db.js";
-import { users } from "./schema.js";
+import { db } from "./db";
+import { users } from "./schema";
 import { eq } from "drizzle-orm";
 
 export default async function handler(req: any, res: any) {
