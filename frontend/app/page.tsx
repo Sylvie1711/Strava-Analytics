@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { YearInReview } from "@/components/year-in-review"
-import { fetchStravaStats } from "@/lib/api"
+import { fetchStravaStats, YearSummary } from "@/lib/api"
 
 export default function Page() {
   const [stravaId, setStravaId] = useState<string | null>(null)
-  const [stats, setStats] = useState<any>(null)
+  const [stats, setStats] = useState<YearSummary | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 

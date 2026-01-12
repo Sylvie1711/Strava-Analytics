@@ -6,12 +6,10 @@ import { PerformanceSection } from "./performance-section"
 import { ProgressCharts } from "./progress-charts"
 import { ActivityBreakdown } from "./activity-breakdown"
 import { AthleteProfile } from "./athlete-profile"
+import { YearSummary } from "@/lib/api"
 
 interface YearInReviewProps {
-  stats?: {
-    runs: number;
-    km: number;
-  }
+  stats?: YearSummary | null
 }
 
 export function YearInReview({ stats }: YearInReviewProps) {

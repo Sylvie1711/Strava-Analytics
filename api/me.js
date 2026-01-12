@@ -1,6 +1,7 @@
 import { db } from "./db.js";
 import { users } from "./schema.js";
 import { eq } from "drizzle-orm";
+import { buildYearSummary } from "../metrics/index.js";
 
 export default async function handler(req, res) {
   const stravaId = req.query.stravaId;
@@ -16,41 +17,46 @@ export default async function handler(req, res) {
 
   const user = result[0];
 
- const after = Math.floor(
-  new Date(new Date().getFullYear(), 0, 1).getTime() / 1000
-);
-
-let page = 1;
-let totalDistance = 0;
-let totalRuns = 0;
-
-while (true) {
-  const r = await fetch(
-    `https://www.strava.com/api/v3/athlete/activities?after=${after}&per_page=200&page=${page}`,
-    {
-      headers: {
-        Authorization: `Bearer ${user.accessToken}`,
-      },
-    }
+  const after = Math.floor(
+    new Date(new Date().getFullYear(), 0, 1).getTime() / 1000
   );
 
-  const data = await r.json();
+  let page = 1;
+  const activities = [];
 
-  if (!Array.isArray(data) || data.length === 0) break;
+  while (true) {
+    const r = await fetch(
+      `https://www.strava.com/api/v3/athlete/activities?after=${after}&per_page=200&page=${page}`,
+      {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      }
+    );
 
-  for (const a of data) {
-    if (a.type && a.type.toLowerCase().includes("run")) {
-      totalRuns++;
-      totalDistance += a.distance;
+    const data = await r.json();
+
+    if (!Array.isArray(data) || data.length === 0) break;
+
+    // Transform Strava data to our Activity interface
+    for (const a of data) {
+      activities.push({
+        id: a.id,
+        type: a.type,
+        distance: a.distance || 0,
+        moving_time: a.moving_time || 0,
+        elapsed_time: a.elapsed_time || 0,
+        total_elevation_gain: a.total_elevation_gain || 0,
+        start_date: a.start_date,
+        start_date_local: a.start_date_local
+      });
     }
+
+    page++;
   }
 
-  page++;
-}
+  // Build comprehensive year summary
+  const yearSummary = buildYearSummary(activities);
 
-
-  res.json({
-    runs: totalRuns,
-    km: (totalDistance / 1000).toFixed(1),
-  });
+  res.json(yearSummary);
 }

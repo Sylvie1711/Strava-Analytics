@@ -1,60 +1,55 @@
 import { Card } from "@/components/ui/card"
 import { Activity, Clock, Calendar, Mountain, TrendingUp, Award } from "lucide-react"
+import { YearSummary } from "@/lib/api"
 
 interface StatsOverviewProps {
-  stats?: {
-    runs: number;
-    km: number;
-  }
+  stats?: YearSummary | null
 }
 
 export function StatsOverview({ stats }: StatsOverviewProps) {
   // Use real stats if available, otherwise use mock data
-  const realStats = stats ? {
-    runs: stats.runs,
-    km: stats.km,
-    miles: (stats.km * 0.621371).toFixed(1),
-    avgPerMonth: Math.round(stats.runs / 12),
-    activeDays: Math.round(stats.runs * 0.9), // Estimate
-    longestActivity: (stats.km / stats.runs * 3).toFixed(1), // Rough estimate
-    elevation: Math.round(stats.km * 10) // Rough estimate
-  } : null
-
-  const displayStats = realStats ? [
+  const displayStats = stats ? [
     {
       label: "Total Distance",
-      value: `${realStats.km.toLocaleString()} km`,
-      subtext: `${realStats.miles} miles`,
+      value: `${stats.total_distance.toLocaleString()} km`,
+      subtext: `${(stats.total_distance * 0.621371).toFixed(1)} miles`,
       icon: Activity,
       color: "text-chart-1",
     },
     {
       label: "Total Activities",
-      value: realStats.runs.toLocaleString(),
-      subtext: `${realStats.avgPerMonth} per month`,
+      value: stats.total_activities.toLocaleString(),
+      subtext: `${Math.round(stats.total_activities / 12)} per month`,
       icon: Calendar,
       color: "text-chart-3",
     },
     {
       label: "Active Days",
-      value: realStats.activeDays.toLocaleString(),
-      subtext: `${Math.round((realStats.activeDays / 365) * 100)}% of the year`,
+      value: stats.active_days.toLocaleString(),
+      subtext: `${Math.round((stats.active_days / 365) * 100)}% of the year`,
       icon: TrendingUp,
       color: "text-chart-4",
     },
     {
       label: "Longest Activity",
-      value: `${realStats.longestActivity} km`,
-      subtext: "Estimated",
+      value: `${stats.longest_activity.distance.toFixed(1)} km`,
+      subtext: `${Math.floor(stats.longest_activity.duration / 60)}m ${stats.longest_activity.duration % 60}s`,
       icon: Award,
       color: "text-chart-5",
     },
     {
       label: "Biggest Elevation",
-      value: `${realStats.elevation.toLocaleString()} m`,
-      subtext: "Estimated",
+      value: `${stats.max_elevation_gain.toLocaleString()} m`,
+      subtext: "Single activity",
       icon: Mountain,
       color: "text-chart-1",
+    },
+    {
+      label: "Longest Streak",
+      value: `${stats.longest_streak} days`,
+      subtext: "Consecutive activities",
+      icon: TrendingUp,
+      color: "text-chart-2",
     },
   ] : [
     {
