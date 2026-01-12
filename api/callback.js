@@ -47,6 +47,6 @@ export default async function handler(req, res) {
       .where(eq(users.stravaId, stravaId));
   }
 
-  res.redirect(`/me?stravaId=${stravaId}`);
+  res.redirect(`/?stravaId=${stravaId}`);
 
 }

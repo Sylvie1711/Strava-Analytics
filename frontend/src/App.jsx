@@ -14,7 +14,26 @@ export default function App() {
       .then(setStats);
   }, [stravaId]);
 
-  if (!stravaId) return <h1>Missing Strava ID</h1>;
+  if (!stravaId) return (
+    <div style={{ padding: 40, fontFamily: "sans-serif", textAlign: "center" }}>
+      <h1>🏃 Strava Year Review</h1>
+      <p>Connect your Strava account to see your 2026 running stats!</p>
+      <button 
+        onClick={() => window.location.href = "/api/login"}
+        style={{
+          padding: "12px 24px",
+          fontSize: "16px",
+          backgroundColor: "#FC4C02",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer"
+        }}
+      >
+        Connect with Strava
+      </button>
+    </div>
+  );
   if (!stats) return <h1>Loading your Strava stats…</h1>;
 
   return (

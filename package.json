@@ -1,0 +1,13 @@
+{
+  "name": "strava-year-review",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.30.4",
+    "pg": "^8.11.5"
+  }
+}
