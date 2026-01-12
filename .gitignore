@@ -9,7 +9,6 @@ yarn-error.log*
 
 # Strava data (your private runs)
 backend/data/
-*.json
 
 # Build outputs
 frontend/.vite
