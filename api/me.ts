@@ -1,7 +1,7 @@
 import { db } from "./db";
 import { users } from "./schema";
 import { eq } from "drizzle-orm";
-import { buildYearSummary } from "../metrics/index.js";
+import { buildYearSummary } from "../metrics/index";
 
 export default async function handler(req: any, res: any) {
   const stravaId = req.query.stravaId;
