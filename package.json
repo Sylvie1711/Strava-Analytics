@@ -4,7 +4,10 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "cd frontend && npm install && npm run build"
+    "build": "cd frontend && npm install && npm run build",
+    "dev": "DATABASE_URL=\"postgresql://neondb_owner:npg_eqKmp2szCwW0@ep-soft-snow-aha7iexa-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\" STRAVA_CLIENT_ID=\"195194\" STRAVA_CLIENT_SECRET=\"3f8ab83f3921110206b4d6f9a549c3c28e83b36f\" node dev-server.js",
+    "dev:full": "concurrently \"npm run dev\" \"cd frontend && npm run dev\"",
+    "start": "cd frontend && npm run start"
   },
   "dependencies": {
     "drizzle-orm": "^0.30.4",
@@ -13,6 +16,7 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/pg": "^8.10.9",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "concurrently": "^8.2.2"
   }
 }

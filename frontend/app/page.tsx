@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { YearInReview } from "@/components/year-in-review"
 import { YearSelector } from "@/components/year-selector"
 import { StatsOverview } from "@/components/stats-overview"
@@ -11,7 +12,8 @@ import { ActivityBreakdown } from "@/components/activity-breakdown"
 import { AthleteProfile } from "@/components/athlete-profile"
 import { fetchStravaStats, YearSummary } from "@/lib/api"
 
-export default function Page() {
+function PageContent() {
+  const searchParams = useSearchParams()
   const [stravaId, setStravaId] = useState<string | null>(null)
   const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString())
   const [stats, setStats] = useState<YearSummary | null>(null)
@@ -20,8 +22,7 @@ export default function Page() {
 
   useEffect(() => {
     // Get stravaId from URL params
-    const params = new URLSearchParams(window.location.search)
-    const stravaIdParam = params.get("stravaId")
+    const stravaIdParam = searchParams.get("stravaId")
     
     if (!stravaIdParam) {
       setLoading(false)
@@ -29,7 +30,7 @@ export default function Page() {
     }
 
     setStravaId(stravaIdParam)
-  }, [])
+  }, [searchParams])
 
   useEffect(() => {
     // Fetch stats whenever stravaId or selectedYear changes
@@ -86,7 +87,9 @@ export default function Page() {
           <h1 className="text-4xl font-bold mb-4">🏃 Strava Year Review</h1>
           <p className="text-muted-foreground mb-8">Connect your Strava account to see your {selectedYear} running stats!</p>
           <button
-            onClick={() => window.location.href = "/api/login"}
+            onClick={() => {
+              window.location.href = "/api/login";
+            }}
             className="px-8 py-4 bg-primary text-primary-foreground rounded-lg font-semibold text-lg hover:bg-primary/90 transition-colors w-full"
           >
             Connect with Strava
@@ -118,6 +121,36 @@ export default function Page() {
           <AthleteProfile stats={stats} />
         </div>
       </div>
+      
+      {/* AI Coach Link */}
+      <div className="mx-auto max-w-7xl px-4 py-8">
+        <div className="text-center">
+          <a 
+            href={`/rag${searchParams.get("stravaId") ? `?stravaId=${searchParams.get("stravaId")}` : ''}`} 
+            className="inline-flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold"
+          >
+            🤖 Try AI Running Coach
+          </a>
+          <p className="text-sm text-muted-foreground mt-2">
+            Get personalized advice based on your recent activities
+          </p>
+        </div>
+      </div>
     </div>
+  )
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    }>
+      <PageContent />
+    </Suspense>
   )
 }

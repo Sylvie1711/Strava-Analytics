@@ -11,6 +11,7 @@ yarn-error.log*
 backend/data/
 
 # Build outputs
+frontend/dist
 frontend/.vite
 
 # OS
