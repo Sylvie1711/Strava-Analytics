@@ -6,7 +6,7 @@ import { answerWithRAG } from './rag/answerWithRAG.js';
 config();
 
 // Debug: Check if DATABASE_URL is loaded
-console.log('DATABASE_URL:', process.env.DATABASE_URL ? process.env.DATABASE_URL.substring(0, 50) + '...' : 'Not loaded');
+console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Loaded successfully' : 'Not loaded');
 
 async function testRAG() {
   console.log('🧪 Testing RAG Implementation...\n');
